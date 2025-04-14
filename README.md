@@ -80,5 +80,5 @@ C:/Users/maciej.maciejewski.2/rust_bin/release/routing_table.exe
 
 ## Autor
 
-Maciej Maciejewski
+Maciej Maciejewski 
 Natalia Stręk
