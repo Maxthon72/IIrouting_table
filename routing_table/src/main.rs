@@ -18,7 +18,7 @@ fn parse_ipv4(s: &str) -> u32 {
     let mut ip_8: Vec<u32> = Vec::new();
     for i in ip.iter()
     {   
-        ip_8.push(i.parse::<u32>().expect("Invalid octet"));
+        ip_8.push(i.parse::<u32>().expect("Parsing error"));
     }
     let ip_32: u32 = (ip_8[0] << 24) + (ip_8[1] << 16) + (ip_8[2] << 8) + (ip_8[3]);
     return ip_32;
