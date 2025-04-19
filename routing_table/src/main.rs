@@ -1,24 +1,31 @@
 use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
-use std::net::Ipv4Addr;
 
 #[derive(Debug)]
 struct Route {
-    network: Ipv4Addr,
-    mask: Ipv4Addr,
+    network: u32,
+    mask: u32,
     action: String,
 }
 
-fn parse_ipv4(s: &str) -> Ipv4Addr {
-    s.parse().expect("Invalid IP address format")
+fn parse_ipv4(s: &str) -> u32 {  
+    let ip: Vec<&str>=s.split(".").collect();
+    if ip.len() != 4
+    {
+        panic!("Invalid IPv4 address");
+    }
+    let mut ip_8: Vec<u32> = Vec::new();
+    for i in ip.iter()
+    {   
+        ip_8.push(i.parse::<u32>().expect("Invalid octet"));
+    }
+    let ip_32: u32 = (ip_8[0] << 24) + (ip_8[1] << 16) + (ip_8[2] << 8) + (ip_8[3]);
+    return ip_32;
 }
 
-fn ip_matches(ip: Ipv4Addr, route: &Route) -> bool {
-    let ip_u32 = u32::from(ip);
-    let net_u32 = u32::from(route.network);
-    let mask_u32 = u32::from(route.mask);
-    (ip_u32 & mask_u32) == (net_u32 & mask_u32)
+fn ip_matches(ip: u32, route: &Route) -> bool {
+    (ip & route.mask) == (route.network & route.mask)
 }
 
 fn read_routes(filename: &str) -> Vec<Route> {
@@ -62,6 +69,6 @@ fn main() {
             }
         }
 
-        println!("{} {}", ip, action);
+        println!("{} {}", ip_str, action);
     }
 }
